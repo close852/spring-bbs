@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,39 +14,40 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * Created by KimYJ on 2017-07-12.
+ * @author CJHM
+ *
  */
 @Entity
-@Table(name="T_USER")
+@Table(name = "T_USER")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 3527709835157984746L;
 
-	@Id 
+	@Id
     @Column
-    @GeneratedValue
-    private Long idx;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long idx;
 
-    @Column
-    private String name;
+	@Column
+	private String name;
 
-    @Column
-    private String password;
+	@Column
+	private String password;
 
-    @Column
-    private String email;
+	@Column
+	private String email;
 
-    @Column
-    @CreationTimestamp
-    private LocalDateTime createDate;
+	@Column
+	@CreationTimestamp
+	private LocalDateTime createDate;
 
-    @Column
-    @UpdateTimestamp
-    private LocalDateTime updateDate;
+	@Column
+	@UpdateTimestamp
+	private LocalDateTime updateDate;
 
-    public User() {
-    	
-    }
+	public User() {
+
+	}
 
 	public User(Long idx, String name, String password, String email, LocalDateTime createDate,
 			LocalDateTime updateDate) {
@@ -110,6 +112,10 @@ public class User implements Serializable {
 		return serialVersionUID;
 	}
 
+	@Override
+	public String toString() {
+		return "User [idx=" + idx + ", name=" + name + ", password=" + password + ", email=" + email + ", createDate="
+				+ createDate + ", updateDate=" + updateDate + "]";
+	}
 
-    
 }

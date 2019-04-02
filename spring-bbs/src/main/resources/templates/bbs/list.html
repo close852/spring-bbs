@@ -60,7 +60,7 @@
                     <tr th:each="board : ${bbsList}">
                         <td th:text="${board.idx}"></td>
                         <td th:text="${board.boardType.value}"></td>
-                        <td><a th:href="'/board?idx='+${board.idx}" th:text="${board.title}"></a></td>
+                        <td><a th:href="'/bbs?idx='+${board.idx}" th:text="${board.title}"></a></td>
                         <td th:text="${#temporals.format(board.createDate,'yyyy-MM-dd HH:mm')}"></td>
                         <td th:text="${#temporals.format(board.updateDate,'yyyy-MM-dd HH:mm')}"></td>
                     </tr>

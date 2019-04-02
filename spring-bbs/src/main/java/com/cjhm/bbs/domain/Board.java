@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -21,6 +22,10 @@ import com.cjhm.bbs.domain.enums.BoardType;
 /**
  * Created by KimYJ on 2017-07-12.
  */
+/**
+ * @author CJHM
+ *
+ */
 @Entity
 @Table(name="T_BOARD")
 public class Board implements Serializable {
@@ -29,7 +34,7 @@ public class Board implements Serializable {
 
 	@Id
     @Column
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long idx;
 
     @Column
@@ -121,6 +126,13 @@ public class Board implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	@Override
+	public String toString() {
+		return "Board [idx=" + idx + ", title=" + title + ", subTitle=" + subTitle + ", content=" + content
+				+ ", boardType=" + boardType + ", createDate=" + createDate + ", updateDate=" + updateDate + ", user="
+				+ user + "]";
+	}
 
+	
     
 }

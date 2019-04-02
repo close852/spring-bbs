@@ -26,10 +26,14 @@ public class BBSService {
     }
 
     public Board findBbsByIdx(Long idx) {
-        return bbsRepository.getOne(idx);
+    	Board bbs = bbsRepository.findById(idx).orElse(new Board());
+        return bbs;
     }
 
     public Board saveAndUpdateBbs(Board board) {
         return bbsRepository.save(board);
+    }
+    public void deleteBbs(Board bbs) {
+    	bbsRepository.delete(bbs);
     }
 }
