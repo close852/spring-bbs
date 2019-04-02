@@ -1,0 +1,23 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--header-->
+		<div th:fragment="header">
+			<article class="top-bar">
+				<section>
+					<menu id="headerMenu">
+					
+						<li th:if="${session.SESSION_USER!=null}"><a href="/member/login" th:text="${session.SESSION_USER.email}"></a></li>
+						<li th:if="${session.SESSION_USER==null}"><a href="/member/login">로그인</a></li>
+						<li th:if="${session.SESSION_USER==null}"><a href="/member/join">회원가입</a></li>
+						<li th:if="${session.SESSION_USER!=null}"><a href="/member/logout">로그아웃</a></li>
+						<li><a href="#">고객센터</a></li>
+					</menu>
+				</section>
+			</article>
+			<section id="headerTitle">
+				<div style="background-color: skyblue; height: 110px;">여기가 헤더
+				</div>
+			</section>
+			<hr>
+		</div>
+<!--/header-->
+</html>
