@@ -5,6 +5,16 @@
     <title>Board Form</title>
     <link rel="stylesheet" th:href="@{/css/base.css}" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <style type="text/css">
+    
+		label.error {
+			float: none;
+			color: red;
+			padding-left: 0px;
+			vertical-align: bottom;
+			color: red;
+		}
+    </style>
 </head>
 <body>
     <!--header-->
@@ -42,16 +52,18 @@
             <h1>게시글 등록</h1>
         </div>
         <br/>
-        <form id="bbsForm" action="/bbs/insert"  th:method="post">
+        <form id="bbsForm" action="/bbs"  th:method="post">
         	<input type="hidden" id="_method" name="_method" >
         	<input id="idx" name="idx" type="hidden" th:value="${bbs?.idx}"/>
+        	<input id="createDate" name="createDate" type="hidden" th:value="${bbs?.createDate}"/>
+        	<input id="updateDate" name="updateDate" type="hidden" th:value="${bbs?.updateDate}"/>
 	        <table class="table">
 	            <tr>
 	                <th style="padding:13px 0 0 15px">게시판 선택</th>
 	                <td>
 	                    <div class="pull-left">
 	                        <select class="form-control input-sm" id="boardType" name="boardType">
-	                            <option>--분류--</option>
+	                            <option value="*">--분류--</option>
 	                            <option th:value="notice" th:selected="${bbs?.boardType}">공지사항</option>
 	                            <option th:value="free" th:selected="${bbs?.boardType}">자유게시판</option>
 	                        </select>
@@ -76,15 +88,15 @@
 	                <td></td>
 	            </tr>
 	        </table>
-        </form>
         <div class="pull-left">
             <a href="/bbs/list" class="btn btn-default">목록으로</a>
         </div>
         <div class="pull-right">
-            <button type="button" class="btn btn-primary" id="insert">저장</button>
-            <button type="button" class="btn btn-info" id="update">수정</button>
-            <button type="button" class="btn btn-danger" id="delete">삭제</button>
+            <button th:if="!${bbs?.idx}" type="submit" class="btn btn-primary" id="insert">저장</button>
+            <button th:if="${bbs?.idx}" type="submit" class="btn btn-info" id="update">수정</button>
+            <button th:if="${bbs?.idx}" type="submit" class="btn btn-danger" id="delete">삭제</button>
         </div>
+        </form>
     </div>
     <!--/body-->
 
@@ -97,7 +109,41 @@
     <!--/footer-->
 
     <script th:src="@{/js/jquery.min.js}"></script>
+    <script src="/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js"></script>
     <script>
+    	$(document).ready(function(){
+    		$("#bbsForm").validate({
+//     			debug : true,
+    			rules:{
+    				title:{
+    					required: true
+    				},				
+    				subTitle:{
+    					required: true
+    				},				
+    				content:{
+    					required: true
+    				},				
+    				boardType:{
+    					chkBoardType: true
+    				}	
+    			}
+    		});
+    		
+    		// 공통 메시지로 생성
+    		$.extend($.validator.messages, {
+    			required : "필수 정보입니다.",
+    			chkBoardType :"선택해주세요"
+    		});
+    		
+    		$.validator.addMethod("chkBoardType", function(value, element) {
+    			if(value=="*"){
+    				return false;
+    			}
+    			return true;
+    		});
+    	})
+    	
 	    let form = $("#bbsForm");
 	    $("#insert").on("click",function(){
 	    	$("#_method").val("post");
@@ -105,38 +151,12 @@
 	    });
 	    $("#update").on("click",function(){
 	    	$("#_method").val("put");
-	    	form.attr("action","/bbs/update");
 	    	form.submit();
 	    });
 	    $("#delete").on("click",function(){
 	    	$("#_method").val("delete");
-	    	form.attr("action","/bbs/delete");
 	    	form.submit();
 	    });
-	    
-        $('#postBtn').click(function () {
-            var jsonData = JSON.stringify({
-                idx: "",
-                title: "",
-                subTitle: ""
-            });
-            $.ajax({
-                       url: "/api/comment/post",
-                       type: "POST",
-                           data: jsonData,
-                               headers: {
-                               "Accept": "application/json",
-                                   "Content-Type": "application/json"
-                           },
-                           dataType: "json",
-                               success: function (data) {
-
-                       },
-                       error: function () {
-
-                       }
-                   });
-        });
     </script>
 </body>
 </html>
