@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.cjhm.bbs.domain.enums.BoardType;
 
@@ -75,6 +76,18 @@ public class Board implements Serializable {
 		this.updateDate = updateDate;
 		this.user = user;
 	}
+	public Board(Long idx, String title, String subTitle, String content, BoardType boardType, String createDate,
+			String updateDate, User user) {
+		super();
+		this.idx = idx;
+		this.title = title;
+		this.subTitle = subTitle;
+		this.content = content;
+		this.boardType = boardType;
+		this.createDate = LocalDateTime.parse(createDate);
+		this.updateDate = LocalDateTime.parse(updateDate);
+		this.user = user;
+	}
 	public Long getIdx() {
 		return idx;
 	}
@@ -111,11 +124,19 @@ public class Board implements Serializable {
 	public void setCreateDate(LocalDateTime createDate) {
 		this.createDate = createDate;
 	}
+	public void setCreateDate(String createDate) {
+		LocalDateTime create = LocalDateTime.parse(createDate);
+		this.createDate = create;
+	}
 	public LocalDateTime getUpdateDate() {
 		return updateDate;
 	}
 	public void setUpdateDate(LocalDateTime updateDate) {
 		this.updateDate = updateDate;
+	}
+	public void setUpdateDate(String updateDate) {
+		LocalDateTime update = LocalDateTime.parse(updateDate);
+		this.updateDate = update;
 	}
 	public User getUser() {
 		return user;

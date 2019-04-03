@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cjhm.bbs.domain.Board;
 import com.cjhm.bbs.domain.User;
+import com.cjhm.bbs.domain.enums.BoardType;
 import com.cjhm.bbs.repository.UserRepository;
 import com.cjhm.bbs.service.BBSService;
 
@@ -57,16 +58,23 @@ public class BBSController {
 	}
 	
 	@PutMapping("/bbs")
-	public String bbsUpdate(Board bbs) {
+	public String bbsUpdate(Long idx, String title, String subTitle,BoardType boardType,String createDate,String content) {
+		Board bbs = new Board();
+		bbs.setIdx(idx);
+		bbs.setTitle(title);
+		bbs.setSubTitle(subTitle);
+		bbs.setBoardType(boardType);
+		bbs.setContent(content);
+		bbs.setCreateDate(createDate);
 		Board b = bbsService.saveAndUpdateBbs(bbs);
 		logger.info("bbs update :: "+b);
 		return "redirect:/bbs?idx="+b.getIdx();
 	}
 
 	@DeleteMapping("/bbs")
-	public String bbsDelete(Board bbs) {
-		logger.info("bbs delete :: "+bbs);
-		bbsService.deleteBbs(bbs);
+	public String bbsDelete(Long idx) {
+		logger.info("bbs delete :: "+idx);
+		bbsService.deleteBbs(idx);
 		return "redirect:/bbs/list";
 	}
 }

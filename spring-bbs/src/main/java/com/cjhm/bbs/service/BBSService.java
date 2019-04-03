@@ -23,7 +23,7 @@ public class BBSService {
     }
 
     public Page<Board> findBbsList(Pageable pageable) {
-    	System.out.println(pageable.getPageNumber()+"/"+pageable.getPageSize()+"/"+pageable.getSort());
+//    	System.out.println(pageable.getPageNumber()+"/"+pageable.getPageSize()+"/"+pageable.getSort());
     	Sort defaultSort = new Sort(Direction.DESC,"idx");
         pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(),pageable.getSortOr(defaultSort));
         return bbsRepository.findAll(pageable);
@@ -37,7 +37,7 @@ public class BBSService {
     public Board saveAndUpdateBbs(Board board) {
         return bbsRepository.save(board);
     }
-    public void deleteBbs(Board bbs) {
-    	bbsRepository.delete(bbs);
+    public void deleteBbs(Long idx) {
+    	bbsRepository.deleteById(idx);
     }
 }
