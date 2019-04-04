@@ -1,0 +1,33 @@
+--상위부서 조회
+WITH RECURSIVE CTE AS(
+	select 
+		code code,
+		parent_code parent
+	from code
+	where code='B'
+	UNION ALL
+	select 
+		a.code,
+		a.parent_code parent
+	from code a
+	inner join CTE b on a.code = b.parent
+)
+select code, parent
+FROM CTE;
+
+--하위부서 조회
+WITH RECURSIVE CTE AS(
+	select 
+		code code,
+		parent_code parent
+	from code
+	where parent_code='*'
+	UNION ALL
+	select 
+		a.code code,
+		a.parent_code parent
+	from code a
+	inner join CTE b on a.parent_code = b.code
+)
+select code, parent
+FROM CTE;

@@ -1,4 +1,4 @@
-package com.cjhm.bbs.controller;
+package com.cjhm.board.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import com.cjhm.bbs.repository.UserRepository;
 import com.cjhm.bbs.service.BBSService;
 
 @Controller
-public class BBSController {
+public class BoardController {
 
 	@Autowired
 	BBSService bbsService;
@@ -29,10 +29,10 @@ public class BBSController {
 	@Autowired
 	UserRepository userRepository;
 	
-	Logger logger = LoggerFactory.getLogger(BBSController.class);
+	Logger logger = LoggerFactory.getLogger(BoardController.class);
 
 
-	@GetMapping({ "", "/bbs" })
+	@GetMapping({ "", "/board" })
 	public String bbs(@RequestParam(name = "idx", defaultValue = "0") Long idx, Model model) {
 		BBS bbs = bbsService.findBbsByIdx(idx);
 //		System.out.println(idx+" / "+bbs2);
@@ -40,14 +40,14 @@ public class BBSController {
 		return "bbs/view";
 	}
 
-	@GetMapping("/bbs/list")
+	@GetMapping("/board/list")
 	public String bbsList(@PageableDefault Pageable pageable, Model model) {
 		Page<BBS> bbsList = bbsService.findBbsList(pageable);
 		model.addAttribute("bbsList", bbsList);
 		return "bbs/list";
 	}
 
-	@PostMapping("/bbs")
+	@PostMapping("/board")
 	public String bbsInsert(BBS bbs) {
 		User u = userRepository.getOne(1L);
 		bbs.setUser(u);
@@ -57,7 +57,7 @@ public class BBSController {
 		return "redirect:/bbs?idx="+b.getIdx();
 	}
 	
-	@PutMapping("/bbs")
+	@PutMapping("/board")
 	public String bbsUpdate(Long idx, String title, String subTitle,BoardType boardType,String createDate,String content) {
 		BBS bbs = new BBS();
 		bbs.setIdx(idx);
@@ -71,7 +71,7 @@ public class BBSController {
 		return "redirect:/bbs?idx="+b.getIdx();
 	}
 
-	@DeleteMapping("/bbs")
+	@DeleteMapping("/board")
 	public String bbsDelete(Long idx) {
 		logger.info("bbs delete :: "+idx);
 		bbsService.deleteBbs(idx);

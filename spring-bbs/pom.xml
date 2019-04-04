@@ -67,6 +67,12 @@
 			<artifactId>jquery-validation</artifactId>
 			<version>1.17.0-1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>

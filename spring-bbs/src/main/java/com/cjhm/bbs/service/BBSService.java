@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.cjhm.bbs.domain.Board;
+import com.cjhm.bbs.domain.BBS;
 import com.cjhm.bbs.repository.BBSRepository;
 
 /**
@@ -22,19 +22,19 @@ public class BBSService {
         this.bbsRepository = bbsRepository;
     }
 
-    public Page<Board> findBbsList(Pageable pageable) {
+    public Page<BBS> findBbsList(Pageable pageable) {
 //    	System.out.println(pageable.getPageNumber()+"/"+pageable.getPageSize()+"/"+pageable.getSort());
     	Sort defaultSort = new Sort(Direction.DESC,"idx");
         pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(),pageable.getSortOr(defaultSort));
         return bbsRepository.findAll(pageable);
     }
 
-    public Board findBbsByIdx(Long idx) {
-    	Board bbs = bbsRepository.findById(idx).orElse(new Board());
+    public BBS findBbsByIdx(Long idx) {
+    	BBS bbs = bbsRepository.findById(idx).orElse(new BBS());
         return bbs;
     }
 
-    public Board saveAndUpdateBbs(Board board) {
+    public BBS saveAndUpdateBbs(BBS board) {
         return bbsRepository.save(board);
     }
     public void deleteBbs(Long idx) {

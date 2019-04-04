@@ -8,11 +8,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.cjhm.bbs.domain.Board;
+import com.cjhm.bbs.domain.BBS;
 import com.cjhm.bbs.domain.User;
 import com.cjhm.bbs.domain.enums.BoardType;
 import com.cjhm.bbs.repository.BBSRepository;
 import com.cjhm.bbs.repository.UserRepository;
+import com.cjhm.board.domain.Article;
+import com.cjhm.board.domain.Board;
+import com.cjhm.board.domain.Category;
+import com.cjhm.board.repository.ArticleRepository;
+import com.cjhm.board.repository.BoardRepository;
+import com.cjhm.board.repository.CategoryRepository;
 
 @SpringBootApplication
 public class SpringBbsApplication {
@@ -22,7 +28,7 @@ public class SpringBbsApplication {
 	}
 
 	@Bean
-	public CommandLineRunner runner(UserRepository userRepository, BBSRepository boardRepository) throws Exception {
+	public CommandLineRunner runner(UserRepository userRepository, BBSRepository bbsRepository,CategoryRepository categoryRepository,BoardRepository boardRepository,ArticleRepository articleRepository) throws Exception {
 		System.out.println("노실행? ");
 		return (args) -> {
 			User u = new User();
@@ -33,7 +39,7 @@ public class SpringBbsApplication {
 			u.setIdx(0L);
 			User user = userRepository.save(u);
 			IntStream.rangeClosed(1, 200).forEach(index ->{
-				Board b = new Board();
+				BBS b = new BBS();
 				b.setTitle("게시글"+index);
 				b.setSubTitle("순서"+index);
 				b.setContent("컨텐츠");
@@ -42,9 +48,76 @@ public class SpringBbsApplication {
 				b.setUpdateDate(LocalDateTime.now());
 				b.setUser(user);
 				
-				boardRepository.save(b);
+				bbsRepository.save(b);
 			}
 			);
+			
+			Category category = categoryRepository.save(
+									Category.builder()
+									.createId(user.getIdx())
+									.createDate(LocalDateTime.now())
+									.name("게시함")
+									.useYn("Y")
+									.build());
+			System.out.println("category :: "+category);
+			Board board = boardRepository.save(
+								Board.builder()
+									.categoryId(category.getCategoryId())
+									.createId(user.getIdx())
+									.createDate(LocalDateTime.now())
+									.depth(1)
+									.sortno(1)
+									.useYn("Y")
+									.upboardId("*")
+									.name("자유게시판")
+									.build());
+			System.out.println("자유게시판 : "+board);
+			for(int idx =1;idx<=35;idx++) {
+				Article article = articleRepository.save(
+						Article.builder()
+						.content("내용"+idx)
+						.title("제목"+idx)
+						.userId(user.getIdx())
+						.boardId(board.getBoardId())
+						.board(board)
+						.createId(user.getIdx())
+						.createDate(LocalDateTime.now())
+						.updateId(user.getIdx())
+						.updateDate(LocalDateTime.now())
+						.build());
+				System.out.println(article);
+			}
+			
+			board = boardRepository.save(
+					Board.builder()
+						.categoryId(category.getCategoryId())
+						.createId(user.getIdx())
+						.createDate(LocalDateTime.now())
+						.depth(1)
+						.sortno(1)
+						.useYn("Y")
+						.upboardId("*")
+						.name("상담게시판")
+						.build());
+			System.out.println("상담게시판 : "+board);		
+			
+			for(int idx =1;idx<=35;idx++) {
+				Article article = articleRepository.save(
+						Article.builder()
+						.content("내용"+idx)
+						.title("제목"+idx)
+						.userId(user.getIdx())
+						.boardId(board.getBoardId())
+						.board(board)
+						.createId(user.getIdx())
+						.createDate(LocalDateTime.now())
+						.updateId(user.getIdx())
+						.updateDate(LocalDateTime.now())
+						.build());
+				System.out.println(article);
+			}
+			
+			
 		};
 	}
 }
