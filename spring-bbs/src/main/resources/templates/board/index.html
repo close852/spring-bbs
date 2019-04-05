@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    
+	<script src="https://cdn.ckeditor.com/4.8.0/full-all/ckeditor.js"></script>
+	<title>Document Editor</title>
+	<style type="text/css">
+		/* Minimal styling to center the editor in this sample */
+		body {
+			padding: 30px;
+			display: flex;
+			align-items: center;
+			text-align: center;
+		}
+
+		.container {
+			margin: 0 auto;
+		}
+		label.error {
+			float: none;
+			color: red;
+			padding-left: 0px;
+			vertical-align: bottom;
+			color: red;
+		}
+		
+	</style>
+</head>
+<body>
+    <!--header-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand" style="text-decoration:none;">
+                    <img th:src="@{/images/spring_boot_gray.png}" class="img-rounded" style="display:inline-block;height:100%;margin-right:5px" />
+                    <span style="vertical-align:middle;">SpringBoot Community Web</span>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/signout">LOGOUT</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>게시글 등록</h1>
+        </div>
+        <br/>
+        <form id="articleForm" action="/board/article"  th:method="post">
+        	<input type="hidden" id="_method" name="_method" >
+        	<input id="articleId" name="articleId" type="hidden" th:value="${article?.articleId}"/>
+        	<input id="userId" name="userId" type="hidden" th:value="${article?.userId}"/>
+        	<input id="boardId" name="boardId" type="hidden" th:value="${article.boardId}"/>
+        	<input id="board" name="board" type="hidden" th:value="${article.board}"/>
+        	<input id="createId" name="createId" type="hidden" th:value="${article?.createId}"/>
+        	<input id="createDate" name="createDate" type="hidden" th:value="${article?.createDate}"/>
+        	<input id="updateDate" name="updateDate" type="hidden" th:value="${article?.updateDate}"/>
+	        <table class="table">
+	            <tr>
+	                <th style="padding:13px 0 0 15px">게시판 선택</th>
+	                <td>
+	                    <div class="pull-left">
+	                        <select class="form-control input-sm" id="boardType" name="boardType">
+	                            <option value="*">--분류--</option>
+	                            <option th:each="board : ${boardList}" th:value="${board.boardId}" th:selected="${board.boardId==boardId}" th:text="${board.name}"></option>
+	                        </select>
+	                    </div>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th style="padding:13px 0 0 15px;">제목</th>
+	                <td><input id="title" name="title" type="text" class="col-md-1 form-control input-sm" th:value="${article?.title}"/></td>
+	            </tr>
+	            <tr>
+	                <th style="padding:13px 0 0 15px;">내용</th>
+	                <td>
+	<textarea id="editor1">
+	</textarea>
+	            </tr>
+	            <tr>
+	                <td></td>
+	                <td></td>
+	            </tr>
+	        </table>
+        <div class="pull-left">
+            <a href="#" th:onclick="goList()" class="btn btn-default">목록으로</a>
+        </div>
+        <div class="pull-right">
+            <button th:if="!${article?.articleId}" type="submit" class="btn btn-primary" id="insert">저장</button>
+            <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="update">수정</button>
+            <button th:if="${article?.articleId}" type="submit" class="btn btn-danger" id="delete">삭제</button>
+        </div>
+        </form>
+    </div>
+    <!--footer-->
+    <footer class="footer">
+        <div class="container">
+            <p>Copyright 2017 young891221. All Right Reserved. Designed by ssosso</p>
+        </div>
+    </footer>
+    <!--/footer-->
+
+	<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
+
+    
+<script>
+function goList(){
+	  //window.history.back();
+   	/*<![CDATA[*/
+		var boardId = '[[ ${param.boardId} ]]'; 
+  	var page = '[[ ${param.page} ]]'; 
+  	var size = '[[ ${param.size} ]]'; 
+  	var sort = '[[ ${param.sort} ]]'; 
+   	/*]]>*/
+  	
+  	let params ={
+  			boardId: boardId,
+  			page: page,
+  			size: size,
+  			sort: sort
+  	}
+		location.href="/board/article/list?"+$.param(params);
+  }
+	$(document).ready(function(){
+		$("#articleForm").validate({
+//			debug : true,
+			rules:{
+				title:{
+					required: true
+				},				
+				subTitle:{
+					required: true
+				},				
+				content:{
+					required: true
+				},				
+				boardType:{
+					chkBoardType: true
+				}	
+			}
+		});
+		
+		// 공통 메시지로 생성
+		$.extend($.validator.messages, {
+			required : "필수 정보입니다.",
+			chkBoardType :"선택해주세요"
+		});
+		
+		$.validator.addMethod("chkBoardType", function(value, element) {
+			if(value=="*"){
+				return false;
+			}
+			return true;
+		});
+	})
+	
+  let form = $("#articleForm");
+  $("#insert").on("click",function(){
+  	$("#_method").val("post");
+  	form.submit();
+  });
+  $("#update").on("click",function(){
+  	$("#_method").val("put");
+  	form.submit();
+  });
+  $("#delete").on("click",function(){
+  	$("#_method").val("delete");
+  	form.submit();
+  });
+	CKEDITOR.replace( 'editor1', {
+		// Define the toolbar: http://docs.ckeditor.com/ckeditor4/docs/#!/guide/dev_toolbar
+		// The full preset from CDN which we used as a base provides more features than we need.
+		// Also by default it comes with a 3-line toolbar. Here we put all buttons in a single row.
+		toolbar: [
+			{ name: 'document', items: [ 'Print' ] },
+			{ name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+			{ name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
+			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat', 'CopyFormatting' ] },
+			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+			{ name: 'align', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+			{ name: 'links', items: [ 'Link', 'Unlink' ] },
+			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+			{ name: 'insert', items: [ 'Image', 'Table' ] },
+			{ name: 'tools', items: [ 'Maximize' ] },
+			{ name: 'editing', items: [ 'Scayt' ] }
+		],
+
+		// Since we define all configuration options here, let's instruct CKEditor to not load config.js which it does by default.
+		// One HTTP request less will result in a faster startup time.
+		// For more information check http://docs.ckeditor.com/ckeditor4/docs/#!/api/CKEDITOR.config-cfg-customConfig
+		customConfig: '',
+
+		// Sometimes applications that convert HTML to PDF prefer setting image width through attributes instead of CSS styles.
+		// For more information check:
+		//  - About Advanced Content Filter: http://docs.ckeditor.com/ckeditor4/docs/#!/guide/dev_advanced_content_filter
+		//  - About Disallowed Content: http://docs.ckeditor.com/ckeditor4/docs/#!/guide/dev_disallowed_content
+		//  - About Allowed Content: http://docs.ckeditor.com/ckeditor4/docs/#!/guide/dev_allowed_content_rules
+		disallowedContent: 'img{width,height,float}',
+		extraAllowedContent: 'img[width,height,align]',
+
+		// Enabling extra plugins, available in the full-all preset: http://ckeditor.com/presets-all
+		extraPlugins: 'tableresize,uploadimage,uploadfile',
+
+		/*********************** File management support ***********************/
+		// In order to turn on support for file uploads, CKEditor has to be configured to use some server side
+		// solution with file upload/management capabilities, like for example CKFinder.
+		// For more information see http://docs.ckeditor.com/ckeditor4/docs/#!/guide/dev_ckfinder_integration
+
+		// Uncomment and correct these lines after you setup your local CKFinder instance.
+		// filebrowserBrowseUrl: 'http://example.com/ckfinder/ckfinder.html',
+		// filebrowserUploadUrl: 'http://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+		/*********************** File management support ***********************/
+
+		// Make the editing area bigger than default.
+		height: 800,
+
+		// An array of stylesheets to style the WYSIWYG area.
+		// Note: it is recommended to keep your own styles in a separate file in order to make future updates painless.
+		contentsCss: [ 'https://cdn.ckeditor.com/4.8.0/full-all/contents.css', '/ckeditor/css/mystyles.css' ],
+
+		// This is optional, but will let us define multiple different styles for multiple editors using the same CSS file.
+		bodyClass: 'document-editor',
+
+		// Reduce the list of block elements listed in the Format dropdown to the most commonly used.
+		format_tags: 'p;h1;h2;h3;pre',
+
+		// Simplify the Image and Link dialog windows. The "Advanced" tab is not needed in most cases.
+		removeDialogTabs: 'image:advanced;link:advanced',
+
+		// Define the list of styles which should be available in the Styles dropdown list.
+		// If the "class" attribute is used to style an element, make sure to define the style for the class in "mystyles.css"
+		// (and on your website so that it rendered in the same way).
+		// Note: by default CKEditor looks for styles.js file. Defining stylesSet inline (as below) stops CKEditor from loading
+		// that file, which means one HTTP request less (and a faster startup).
+		// For more information see http://docs.ckeditor.com/ckeditor4/docs/#!/guide/dev_styles
+		stylesSet: [
+			/* Inline Styles */
+			{ name: 'Marker', element: 'span', attributes: { 'class': 'marker' } },
+			{ name: 'Cited Work', element: 'cite' },
+			{ name: 'Inline Quotation', element: 'q' },
+
+			/* Object Styles */
+			{
+				name: 'Special Container',
+				element: 'div',
+				styles: {
+					padding: '5px 10px',
+					background: '#eee',
+					border: '1px solid #ccc'
+				}
+			},
+			{
+				name: 'Compact table',
+				element: 'table',
+				attributes: {
+					cellpadding: '5',
+					cellspacing: '0',
+					border: '1',
+					bordercolor: '#ccc'
+				},
+				styles: {
+					'border-collapse': 'collapse'
+				}
+			},
+			{ name: 'Borderless Table', element: 'table', styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
+			{ name: 'Square Bulleted List', element: 'ul', styles: { 'list-style-type': 'square' } }
+		]
+	} );
+</script>
+</body>
+</html>

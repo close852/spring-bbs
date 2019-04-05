@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.cjhm.bbs.domain.BBS;
 import com.cjhm.bbs.domain.User;
@@ -23,6 +24,10 @@ import com.cjhm.board.repository.CategoryRepository;
 @SpringBootApplication
 public class SpringBbsApplication {
 
+	@GetMapping({"","/"})
+	public String index() {
+		return "index";
+	}
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBbsApplication.class, args);
 	}

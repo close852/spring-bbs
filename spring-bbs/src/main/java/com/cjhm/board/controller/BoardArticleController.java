@@ -50,6 +50,19 @@ public class BoardArticleController {
 		model.addAttribute("boardList", boardList);
 		return "board/view";
 	}
+	@GetMapping("/article/index" )
+	public String articleIndex(@RequestParam(defaultValue="0") Long boardId,@RequestParam(defaultValue="0") Long articleId, Model model) {
+		logger.debug("GET /board/article params:"+"articleId="+articleId+"&boardId="+boardId);
+		Article article = articleService.findArticleByIdx(articleId);
+		Board board  =boardService.findBoardByIdx(boardId);
+//		System.out.println("get article -> "+article+"/"+board);
+		List<Board> boardList  = boardService.findBoardList(board.getCategoryId());
+		//boardId, boardList
+		model.addAttribute("article", article);
+		model.addAttribute("boardId", boardId);
+		model.addAttribute("boardList", boardList);
+		return "board/index";
+	}
 
 	@GetMapping("/article/list")
 	public String articleList(@RequestParam(defaultValue="0") Long boardId, @PageableDefault Pageable pageable, Model model) {

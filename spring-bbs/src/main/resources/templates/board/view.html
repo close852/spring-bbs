@@ -5,10 +5,10 @@
     <title>Board Form</title>
     <link rel="stylesheet" th:href="@{/css/base.css}" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" href="/thirdparty/editor/ckeditor/4.11.3/full/samples/css/samples.css">    
 <!--     <link rel="stylesheet" th:href="@{/css/base.css}" /> -->
 <!--     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}" /> -->
     <style type="text/css">
-    
 		label.error {
 			float: none;
 			color: red;
@@ -17,102 +17,12 @@
 			color: red;
 		}
     </style>
-</head>
-<body>
-    <!--header-->
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand" style="text-decoration:none;">
-                    <img th:src="@{/images/spring_boot_gray.png}" class="img-rounded" style="display:inline-block;height:100%;margin-right:5px" />
-                    <span style="vertical-align:middle;">SpringBoot Community Web</span>
-                </a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/signout">LOGOUT</a>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-    <!--/header-->
-
-    <!--body-->
-    <div class="container">
-        <div class="page-header">
-            <h1>게시글 등록</h1>
-        </div>
-        <br/>
-        <form id="articleForm" action="/board/article"  th:method="post">
-        	<input type="hidden" id="_method" name="_method" >
-        	<input id="articleId" name="articleId" type="hidden" th:value="${article?.articleId}"/>
-        	<input id="userId" name="userId" type="hidden" th:value="${article?.userId}"/>
-        	<input id="boardId" name="boardId" type="hidden" th:value="${article.boardId}"/>
-        	<input id="board" name="board" type="hidden" th:value="${article.board}"/>
-        	<input id="createId" name="createId" type="hidden" th:value="${article?.createId}"/>
-        	<input id="createDate" name="createDate" type="hidden" th:value="${article?.createDate}"/>
-        	<input id="updateDate" name="updateDate" type="hidden" th:value="${article?.updateDate}"/>
-	        <table class="table">
-	            <tr>
-	                <th style="padding:13px 0 0 15px">게시판 선택</th>
-	                <td>
-	                    <div class="pull-left">
-	                        <select class="form-control input-sm" id="boardType" name="boardType">
-	                            <option value="*">--분류--</option>
-	                            <option th:each="board : ${boardList}" th:value="${board.boardId}" th:selected="${board.boardId==boardId}" th:text="${board.name}"></option>
-	                        </select>
-	                    </div>
-	                </td>
-	            </tr>
-	            <tr>
-	                <th style="padding:13px 0 0 15px;">제목</th>
-	                <td><input id="title" name="title" type="text" class="col-md-1 form-control input-sm" th:value="${article?.title}"/></td>
-	            </tr>
-	            <tr>
-	                <th style="padding:13px 0 0 15px;">내용</th>
-	                <td><textarea id="content" name="content" class="col-md-1 form-control input-sm" maxlength="140" rows="7" style="height: 200px;" th:text="${article?.content}"></textarea><span class="help-block"></span>
-	                </td>
-	            </tr>
-	            <tr>
-	                <td></td>
-	                <td></td>
-	            </tr>
-	        </table>
-        <div class="pull-left">
-            <a href="#" th:onclick="goList()" class="btn btn-default">목록으로</a>
-        </div>
-        <div class="pull-right">
-            <button th:if="!${article?.articleId}" type="submit" class="btn btn-primary" id="insert">저장</button>
-            <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="update">수정</button>
-            <button th:if="${article?.articleId}" type="submit" class="btn btn-danger" id="delete">삭제</button>
-        </div>
-        </form>
-    </div>
-    <!--/body-->
-
-    <!--footer-->
-    <footer class="footer">
-        <div class="container">
-            <p>Copyright 2017 young891221. All Right Reserved. Designed by ssosso</p>
-        </div>
-    </footer>
-    <!--/footer-->
-
-<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+    
+	<script src="/thirdparty/editor/ckeditor/4.11.3/full/ckeditor.js"></script>
+	<script src="/thirdparty/editor/ckeditor/4.11.3/full/samples/js/sample.js"></script>
+	<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
     <script th:src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
-    <script>
-//     function goList(boardId, page, size, sort){
+    <script type="text/javascript">
 	    function goList(){
 	  	  //window.history.back();
 	     	/*<![CDATA[*/
@@ -175,7 +85,104 @@
 	    $("#delete").on("click",function(){
 	    	$("#_method").val("delete");
 	    	form.submit();
-	    });
+	    });  
+    </script>
+	
+</head>
+<body>
+    <!--header-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand" style="text-decoration:none;">
+                    <img th:src="@{/images/spring_boot_gray.png}" class="img-rounded" style="display:inline-block;height:100%;margin-right:5px" />
+                    <span style="vertical-align:middle;">SpringBoot Community Web</span>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/signout">LOGOUT</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <!--/header-->
+
+    <!--body-->
+    <div class="container">
+        <div class="page-header">
+            <h1>게시글 등록</h1>
+        </div>
+        <br/>
+        <form id="articleForm" action="/board/article"  th:method="post">
+        	<input type="hidden" id="_method" name="_method" >
+        	<input id="articleId" name="articleId" type="hidden" th:value="${article?.articleId}"/>
+        	<input id="userId" name="userId" type="hidden" th:value="${article?.userId}"/>
+        	<input id="boardId" name="boardId" type="hidden" th:value="${article.boardId}"/>
+        	<input id="board" name="board" type="hidden" th:value="${article.board}"/>
+        	<input id="createId" name="createId" type="hidden" th:value="${article?.createId}"/>
+        	<input id="createDate" name="createDate" type="hidden" th:value="${article?.createDate}"/>
+        	<input id="updateDate" name="updateDate" type="hidden" th:value="${article?.updateDate}"/>
+	        <table class="table">
+	            <tr>
+	                <th style="padding:13px 0 0 15px;text-align: right;">게시판 선택</th>
+	                <td>
+	                    <div class="pull-left">
+	                        <select class="form-control input-sm" id="boardType" name="boardType">
+	                            <option value="*">--분류--</option>
+	                            <option th:each="board : ${boardList}" th:value="${board.boardId}" th:selected="${board.boardId==boardId}" th:text="${board.name}"></option>
+	                        </select>
+	                    </div>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th style="padding:13px 0 0 15px;text-align: right;">제목</th>
+	                <td><input id="title" name="title" type="text" class="col-md-1 form-control input-sm" th:value="${article?.title}"/></td>
+	            </tr>
+	            <tr>
+	                <th style="padding:13px 0 0 15px;text-align: right;">내용</th>
+	                <td>
+<!-- 	                <textarea id="content" name="content" class="col-md-1 form-control input-sm ckeditor" maxlength="140" rows="7" style="height: 200px;" th:text="${article?.content}"></textarea><span class="help-block"></span> -->
+						<div id="editor"></div>
+           		 	</td>
+	            </tr>
+	            <tr>
+	                <td></td>
+	                <td></td>
+	            </tr>
+	        </table>
+        <div class="pull-left">
+            <a href="#" th:onclick="goList()" class="btn btn-default">목록으로</a>
+        </div>
+        <div class="pull-right">
+            <button th:if="!${article?.articleId}" type="submit" class="btn btn-primary" id="insert">저장</button>
+            <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="update">수정</button>
+            <button th:if="${article?.articleId}" type="submit" class="btn btn-danger" id="delete">삭제</button>
+        </div>
+        </form>
+    </div>
+    <!--/body-->
+
+    <!--footer-->
+    <footer class="footer">
+        <div class="container">
+            <p>Copyright 2017 young891221. All Right Reserved. Designed by ssosso</p>
+        </div>
+    </footer>
+    <!--/footer-->
+    <script type="text/javascript">
+  	  initSample();
     </script>
 </body>
 </html>

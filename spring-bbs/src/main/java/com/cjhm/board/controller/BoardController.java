@@ -32,7 +32,7 @@ public class BoardController {
 	Logger logger = LoggerFactory.getLogger(BoardController.class);
 
 
-	@GetMapping({ "", "/board" })
+	@GetMapping({ "/board" })
 	public String bbs(@RequestParam(name = "idx", defaultValue = "0") Long idx, Model model) {
 		BBS bbs = bbsService.findBbsByIdx(idx);
 //		System.out.println(idx+" / "+bbs2);

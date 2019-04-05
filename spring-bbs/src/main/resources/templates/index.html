@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+-->
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>CKEditor Sample</title>
+	<script src="/ckeditor/full/ckeditor.js"></script>
+	<link rel="stylesheet" href="/ckeditor/full/samples/css/samples.css">
+<!-- 	<link rel="stylesheet" href="/ckeditor/full/samples/toolbarconfigurator/lib/codemirror/neo.css"> -->
+	
+	<script src="/ckeditor/full/samples/js/sample.js"></script>
+	<script type="text/javascript">
+	
+	var initSample = ( function() {
+		var wysiwygareaAvailable = isWysiwygareaAvailable(),
+			isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
+
+		
+		
+		return function() {
+			var editorElement = CKEDITOR.document.getById( 'editor' );
+
+			// :(((
+			if ( isBBCodeBuiltIn ) {
+				editorElement.setHtml(
+					'Hello world33!\n\n' +
+					'I\'m an instance of [url=https://ckeditor.com]CKEditor[/url].'
+				);
+			}
+
+			// Depending on the wysiwygarea plugin availability initialize classic or inline editor.
+			if ( wysiwygareaAvailable ) {
+				CKEDITOR.replace( 'editor' );
+			} else {
+				editorElement.setAttribute( 'contenteditable', 'true' );
+				CKEDITOR.inline( 'editor' );
+
+				// TODO we can consider displaying some info box that
+				// without wysiwygarea the classic editor may not work.
+			}
+			
+			CKEDITOR.editorConfig(config);
+		};
+
+		function isWysiwygareaAvailable() {
+			// If in development mode, then the wysiwygarea must be available.
+			// Split REV into two strings so builder does not replace it :D.
+			if ( CKEDITOR.revision == ( '%RE' + 'V%' ) ) {
+				return true;
+			}
+
+			return !!CKEDITOR.plugins.get( 'wysiwygarea' );
+		}
+	} )();
+
+			</script>
+<!-- 	<link rel="stylesheet" href="/ckeditor/full/samples/css/samples.css"> -->
+<!-- 	<link rel="stylesheet" href="/ckeditor/full/samples/toolbarconfigurator/lib/codemirror/neo.css"> -->
+</head>
+<body id="main">
+
+<main>
+	<div class="adjoined-bottom">
+		<div class="grid-container" >
+			<div class="grid-width-100">
+				<div id="editor">
+					<h1>Hello world!</h1>
+					<p>I'm an instance of <a href="https://ckeditor.com">CKEditor</a>.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+<script>
+	initSample();
+</script>
+
+</body>
+</html>
