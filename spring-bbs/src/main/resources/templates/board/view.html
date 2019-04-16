@@ -5,7 +5,7 @@
     <title>Board Form</title>
     <link rel="stylesheet" th:href="@{/css/base.css}" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-	<link rel="stylesheet" href="/thirdparty/editor/ckeditor/4.11.3/full/samples/css/samples.css">    
+<!-- 	<link rel="stylesheet" href="/thirdparty/editor/ckeditor/4.11.3/full/samples/css/samples.css">     -->
 <!--     <link rel="stylesheet" th:href="@{/css/base.css}" /> -->
 <!--     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}" /> -->
     <style type="text/css">
@@ -27,17 +27,18 @@
 	  	  //window.history.back();
 	     	/*<![CDATA[*/
 			var boardId = '[[ ${param.boardId} ]]'; 
-	    	var page = '[[ ${param.page} ]]'; 
+	    	var page = '[[ ${param.page}]]';
 	    	var size = '[[ ${param.size} ]]'; 
+	    	size = size==''?10:size;
 	    	var sort = '[[ ${param.sort} ]]'; 
 	     	/*]]>*/
-	    	
 	    	let params ={
 	    			boardId: boardId,
 	    			page: page,
 	    			size: size,
 	    			sort: sort
 	    	}
+	    	
 			location.href="/board/article/list?"+$.param(params);
 	    }
     	$(document).ready(function(){
@@ -47,11 +48,11 @@
     				title:{
     					required: true
     				},				
-    				subTitle:{
-    					required: true
-    				},				
-    				content:{
-    					required: true
+//     				content:{
+//     					required: true
+//     				},				
+    				editor:{
+    					editorRequired: true
     				},				
     				boardType:{
     					chkBoardType: true
@@ -62,6 +63,7 @@
     		// 공통 메시지로 생성
     		$.extend($.validator.messages, {
     			required : "필수 정보입니다.",
+//     			editorRequired : "필수 정보입니다.",
     			chkBoardType :"선택해주세요"
     		});
     		
@@ -71,21 +73,31 @@
     			}
     			return true;
     		});
-    	})
+//     		$.validator.addMethod("editorRequired", function(value, element) {
+    			
+//     			return false;
+//     		});
+
+    	    let form = $("#articleForm");
+    	    $("#insert").on("click",function(){
+    	    	var data =CKEDITOR.instances.editor.getData();
+    	    	$("#editor").val(data);
+    	    	$("#_method").val("post");
+    	    	form.submit();
+    	    });
+    	    $("#update").on("click",function(){
+//     	    	alert('www');
+
+    	    	$("#_method").val("put");
+    	    	form.submit();
+    	    });
+    	    $("#delete").on("click",function(){
+    	    	$("#_method").val("delete");
+    	    	form.submit();
+    	    });  
+   	 })
     	
-	    let form = $("#articleForm");
-	    $("#insert").on("click",function(){
-	    	$("#_method").val("post");
-	    	form.submit();
-	    });
-	    $("#update").on("click",function(){
-	    	$("#_method").val("put");
-	    	form.submit();
-	    });
-	    $("#delete").on("click",function(){
-	    	$("#_method").val("delete");
-	    	form.submit();
-	    });  
+
     </script>
 	
 </head>
@@ -129,8 +141,8 @@
         	<input type="hidden" id="_method" name="_method" >
         	<input id="articleId" name="articleId" type="hidden" th:value="${article?.articleId}"/>
         	<input id="userId" name="userId" type="hidden" th:value="${article?.userId}"/>
-        	<input id="boardId" name="boardId" type="hidden" th:value="${article.boardId}"/>
-        	<input id="board" name="board" type="hidden" th:value="${article.board}"/>
+<!--         	<input id="boardId" name="boardId" type="hidden" th:value="${article?.boardId}"/> -->
+        	<input id="board" name="board" type="hidden" th:value="${article?.board}"/>
         	<input id="createId" name="createId" type="hidden" th:value="${article?.createId}"/>
         	<input id="createDate" name="createDate" type="hidden" th:value="${article?.createDate}"/>
         	<input id="updateDate" name="updateDate" type="hidden" th:value="${article?.updateDate}"/>
@@ -139,7 +151,7 @@
 	                <th style="padding:13px 0 0 15px;text-align: right;">게시판 선택</th>
 	                <td>
 	                    <div class="pull-left">
-	                        <select class="form-control input-sm" id="boardType" name="boardType">
+	                        <select class="form-control input-sm" id="boardId" name="boardId">
 	                            <option value="*">--분류--</option>
 	                            <option th:each="board : ${boardList}" th:value="${board.boardId}" th:selected="${board.boardId==boardId}" th:text="${board.name}"></option>
 	                        </select>
@@ -153,8 +165,8 @@
 	            <tr>
 	                <th style="padding:13px 0 0 15px;text-align: right;">내용</th>
 	                <td>
-<!-- 	                <textarea id="content" name="content" class="col-md-1 form-control input-sm ckeditor" maxlength="140" rows="7" style="height: 200px;" th:text="${article?.content}"></textarea><span class="help-block"></span> -->
-						<div id="editor"></div>
+	                <textarea id="content" name="content" class="col-md-1 form-control input-sm ckeditor" maxlength="140" rows="7" style="height: 200px;" th:text="${article?.content}"></textarea><span class="help-block"></span>
+<!-- 						<div id="content" name="content"></div> -->
            		 	</td>
 	            </tr>
 	            <tr>
@@ -177,7 +189,7 @@
     <!--footer-->
     <footer class="footer">
         <div class="container">
-            <p>Copyright 2017 young891221. All Right Reserved. Designed by ssosso</p>
+            <p>Copyright 2019 jiwoo.choi. All Right Reserved. Designed by ssosso</p>
         </div>
     </footer>
     <!--/footer-->

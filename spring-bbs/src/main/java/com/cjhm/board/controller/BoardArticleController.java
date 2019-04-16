@@ -1,5 +1,7 @@
 package com.cjhm.board.controller;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.cjhm.bbs.domain.User;
 import com.cjhm.board.domain.Article;
@@ -52,7 +57,7 @@ public class BoardArticleController {
 	}
 	@GetMapping("/article/index" )
 	public String articleIndex(@RequestParam(defaultValue="0") Long boardId,@RequestParam(defaultValue="0") Long articleId, Model model) {
-		logger.debug("GET /board/article params:"+"articleId="+articleId+"&boardId="+boardId);
+		logger.debug("GET /board/article/index params : boardId="+boardId);
 		Article article = articleService.findArticleByIdx(articleId);
 		Board board  =boardService.findBoardByIdx(boardId);
 //		System.out.println("get article -> "+article+"/"+board);
@@ -78,7 +83,7 @@ public class BoardArticleController {
 		logger.debug("POST /board/article params: article="+article);
 		Article a = articleService.saveAndUpdateArticle(article);
 		logger.debug("bbs insert :: "+a);
-		return "redirect:/board/article?idx="+a.getArticleId();
+		return "redirect:/board/article?articleId="+a.getArticleId()+"&boardId="+article.getBoardId();
 	}
 	
 	@PutMapping("/article")
@@ -107,5 +112,23 @@ public class BoardArticleController {
 		logger.debug("DELETE /board/article params: articleId="+idx);
 		articleService.deleteArticle(idx);
 		return "redirect:/board/article/list";
+	}
+	
+	@PostMapping("/article/imageUpload2")
+	@ResponseBody
+	public String imageUpload(MultipartHttpServletRequest request) {
+//		Map<String, MultipartFile> files = request.getFileMap();
+		MultipartFile uploadFile = request.getFile("upload");
+//		String path = "D:\\git\\Spring-bbs\\spring-repository\\article\\file";
+		String path = "D:\\git\\Spring-bbs\\spring-bbs\\src\\main\\resources\\static\\repository\\bbs\\article\\file";
+		String filename = String.valueOf(System.currentTimeMillis())+uploadFile.getOriginalFilename();
+		try (FileOutputStream fos = new FileOutputStream(path + "\\" + filename);) {
+			fos.write(uploadFile.getBytes());
+			fos.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return "/bbs/article/file/"+filename;
 	}
 }
