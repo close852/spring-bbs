@@ -48,13 +48,7 @@
     				title:{
     					required: true
     				},				
-//     				content:{
-//     					required: true
-//     				},				
-    				editor:{
-    					editorRequired: true
-    				},				
-    				boardType:{
+    				boardId:{
     					chkBoardType: true
     				}	
     			}
@@ -63,25 +57,22 @@
     		// 공통 메시지로 생성
     		$.extend($.validator.messages, {
     			required : "필수 정보입니다.",
-//     			editorRequired : "필수 정보입니다.",
     			chkBoardType :"선택해주세요"
     		});
     		
     		$.validator.addMethod("chkBoardType", function(value, element) {
+//     			console.log(value);
     			if(value=="*"){
     				return false;
     			}
     			return true;
     		});
-//     		$.validator.addMethod("editorRequired", function(value, element) {
-    			
-//     			return false;
-//     		});
 
     	    let form = $("#articleForm");
     	    $("#insert").on("click",function(){
-    	    	var data =CKEDITOR.instances.editor.getData();
-    	    	$("#editor").val(data);
+//     	    	var data =CKEDITOR.instances.content.getData();
+//     	    	alert(data);
+//     	    	$("#content").val(data+"3333??????????????");
     	    	$("#_method").val("post");
     	    	form.submit();
     	    });
@@ -174,6 +165,9 @@
 	                <td></td>
 	            </tr>
 	        </table>
+	    <div style="width: 100%; float: clear;" >
+	    asd
+	    </div>
         <div class="pull-left">
             <a href="#" th:onclick="goList()" class="btn btn-default">목록으로</a>
         </div>
