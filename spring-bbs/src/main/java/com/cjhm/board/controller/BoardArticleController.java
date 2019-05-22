@@ -42,6 +42,29 @@ public class BoardArticleController {
 	
 	@Autowired
 	BoardService boardService;
+	@PostMapping("/rearticle" )
+	public String rearticle(@RequestParam(defaultValue="0") Long boardId,@RequestParam(defaultValue="0") Long articleId, Model model) {
+		logger.debug("POST /board/rearticle params:"+"articleId="+articleId+"&boardId="+boardId);
+		Article article = articleService.findArticleByIdx(articleId);
+		Board board  =boardService.findBoardByIdx(boardId);
+		//boardId, boardList
+		if(null==article.getUparticleId()) {
+			article.setUparticleId(articleId);
+		}
+		article.setRefarticleId(articleId);
+		List<Board> boardList  = boardService.findBoardList(board.getCategoryId());
+		System.out.println("article.getUparticleId() : "+article.getUparticleId());
+		int sort = articleService.getSortNoByUparticleId(article.getUparticleId());
+		article.addIndent();
+		article.setSortno(sort);
+		article.setArticleId(null);
+		article.setCreateDate(null);
+		article.setUpdateDate(null);
+		model.addAttribute("article", article);
+		model.addAttribute("boardId", boardId);
+		model.addAttribute("boardList", boardList);
+		return "board/view";
+	}
 	@GetMapping("/article" )
 	public String article(@RequestParam(defaultValue="0") Long boardId,@RequestParam(defaultValue="0") Long articleId, Model model) {
 		logger.debug("GET /board/article params:"+"articleId="+articleId+"&boardId="+boardId);

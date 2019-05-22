@@ -44,4 +44,9 @@ public class ArticleService {
 		return articleRepository.findById(idx).orElse(new Article());
 	}
 
+	public int getSortNoByUparticleId(Long uparticleId) {
+		// TODO Auto-generated method stub
+		return articleRepository.countByUparticleId(uparticleId)+1;
+	}
+
 }

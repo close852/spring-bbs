@@ -50,8 +50,11 @@ public class Article implements Serializable {
 	private Long uparticleId;
 
 	@Column
+	private Long indent;
+
+	@Column
 	private Long boardId;
-	
+
 	@Column
 	private String title;
 
@@ -62,14 +65,15 @@ public class Article implements Serializable {
 	private String contentFileId;
 
 	@Column
-	private int sortno;
+	@Builder.Default
+	private int sortno = 1;
 
 	@Column
 	private Long userId;
 
 	@Column
 	private Long createId;
-	
+
 	@Column
 	@CreationTimestamp
 	private LocalDateTime createDate;
@@ -80,7 +84,11 @@ public class Article implements Serializable {
 	@Column
 	@UpdateTimestamp
 	private LocalDateTime updateDate;
-	
-	@OneToOne(fetch= FetchType.LAZY)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	Board board;
+
+	public void addIndent() {
+		this.indent++;
+	}
 }

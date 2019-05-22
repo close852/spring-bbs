@@ -85,7 +85,14 @@
     	    $("#delete").on("click",function(){
     	    	$("#_method").val("delete");
     	    	form.submit();
-    	    });  
+    	    });
+    	    $("#rearticle").on("click",function(){
+    	    	$("#_method").val("get");
+    	    	form.attr("action","/board/rearticle");
+    	    	form.submit();
+    	    });
+    	    
+    	    
    	 })
     	
 
@@ -131,12 +138,16 @@
         <form id="articleForm" action="/board/article"  th:method="post">
         	<input type="hidden" id="_method" name="_method" >
         	<input id="articleId" name="articleId" type="hidden" th:value="${article?.articleId}"/>
+        	<input id="uparticleId" name="uparticleId" type="hidden" th:value="${article?.uparticleId}"/>
+        	<input id="refarticleId" name="refarticleId" type="hidden" th:value="${article?.refarticleId}"/>
+        	<input id="indent" name="indent" type="hidden" th:value="${article?.indent}"/>
+        	<input id="sortno" name="sortno" type="hidden" th:value="${article?.sortno}"/>
         	<input id="userId" name="userId" type="hidden" th:value="${article?.userId}"/>
 <!--         	<input id="boardId" name="boardId" type="hidden" th:value="${article?.boardId}"/> -->
-        	<input id="board" name="board" type="hidden" th:value="${article?.board}"/>
+<!--         	<input id="board" name="board" type="hidden" th:value="${article?.board}"/> -->
         	<input id="createId" name="createId" type="hidden" th:value="${article?.createId}"/>
-        	<input id="createDate" name="createDate" type="hidden" th:value="${article?.createDate}"/>
-        	<input id="updateDate" name="updateDate" type="hidden" th:value="${article?.updateDate}"/>
+<!--         	<input id="createDate" name="createDate" type="hidden" th:value="${article?.createDate}"/> -->
+<!--         	<input id="updateDate" name="updateDate" type="hidden" th:value="${article?.updateDate}"/> -->
 	        <table class="table">
 	            <tr>
 	                <th style="padding:13px 0 0 15px;text-align: right;">게시판 선택</th>
@@ -173,6 +184,7 @@
         </div>
         <div class="pull-right">
             <button th:if="!${article?.articleId}" type="submit" class="btn btn-primary" id="insert">저장</button>
+            <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="rearticle">답글쓰기</button>
             <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="update">수정</button>
             <button th:if="${article?.articleId}" type="submit" class="btn btn-danger" id="delete">삭제</button>
         </div>
