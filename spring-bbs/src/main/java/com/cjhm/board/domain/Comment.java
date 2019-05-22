@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,9 +43,6 @@ public class Comment extends BaseEntity implements Serializable {
 	private Long refcommentId;
 
 	@Column
-	private Long articleId;
-
-	@Column
 	private String content;
 
 	@Column
@@ -65,4 +64,8 @@ public class Comment extends BaseEntity implements Serializable {
 	@Column
 	@UpdateTimestamp
 	private LocalDateTime updateDate;
+	
+	@ManyToOne(targetEntity=Article.class)
+	@JoinColumn(name="articleId")
+	Article article;
 }

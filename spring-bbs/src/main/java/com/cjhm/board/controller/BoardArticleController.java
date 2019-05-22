@@ -48,10 +48,12 @@ public class BoardArticleController {
 		Article article = articleService.findArticleByIdx(articleId);
 		Board board  =boardService.findBoardByIdx(boardId);
 		//boardId, boardList
-		if(null==article.getUparticleId()) {
-			article.setUparticleId(articleId);
+		article.setUparticleId(articleId);
+		
+		if(null==article.getRefarticleId()) {
+			article.setRefarticleId(articleId);
 		}
-		article.setRefarticleId(articleId);
+		
 		List<Board> boardList  = boardService.findBoardList(board.getCategoryId());
 		System.out.println("article.getUparticleId() : "+article.getUparticleId());
 		int sort = articleService.getSortNoByUparticleId(article.getUparticleId());

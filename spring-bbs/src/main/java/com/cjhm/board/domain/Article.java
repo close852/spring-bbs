@@ -9,7 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -50,7 +51,8 @@ public class Article implements Serializable {
 	private Long uparticleId;
 
 	@Column
-	private Long indent;
+	@Builder.Default
+	private Long indent =1L;
 
 	@Column
 	private Long boardId;
@@ -85,7 +87,8 @@ public class Article implements Serializable {
 	@UpdateTimestamp
 	private LocalDateTime updateDate;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity=Board.class,fetch=FetchType.LAZY)
+	@JoinColumn(name="boardId",insertable=false,updatable=false)
 	Board board;
 
 	public void addIndent() {
