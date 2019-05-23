@@ -10,5 +10,6 @@ import com.cjhm.board.domain.Article;
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
 	Page<Article> findAllByBoardId(Long boardId,Pageable pageable);
+	Page<Article> findAllByOrderByRefarticleIdDescIndentAscSortnoAsc(Long boardId,Pageable pageable);
 	Integer countByUparticleId(Long uparticleId);
 }

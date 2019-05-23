@@ -43,10 +43,16 @@ public class Comment extends BaseEntity implements Serializable {
 	private Long refcommentId;
 
 	@Column
+	private Long upcommentId;
+
+	@Column
 	private String content;
 
 	@Column
 	private int sortno;
+
+	@Column
+	private int indent;
 
 	@Column
 	private Long userId;
@@ -68,4 +74,11 @@ public class Comment extends BaseEntity implements Serializable {
 	@ManyToOne(targetEntity=Article.class)
 	@JoinColumn(name="articleId")
 	Article article;
+	
+	public void addArticle(Article article) {
+		this.article=article;
+		if(article!=null && !article.getCommentList().contains(this)) {
+			article.getCommentList().add(this);
+		}
+	}
 }

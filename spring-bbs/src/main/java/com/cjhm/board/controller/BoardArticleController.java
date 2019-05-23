@@ -98,7 +98,7 @@ public class BoardArticleController {
 	public String articleList(@RequestParam(defaultValue="0") Long boardId, @PageableDefault Pageable pageable, Model model) {
 		logger.debug("GET /board/article/list params: boardId="+boardId+"&page="+pageable);
 
-		Page<Article> articleList = articleService.findArticleList(boardId,pageable);
+		Page<Article> articleList = articleService.findArticleListDefault(boardId,pageable);
 		model.addAttribute("articleList", articleList);
 		return "board/list";
 	}
