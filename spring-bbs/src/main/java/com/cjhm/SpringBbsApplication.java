@@ -1,8 +1,25 @@
 package com.cjhm;
 
+import java.time.LocalDateTime;
+import java.util.stream.IntStream;
+
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.cjhm.bbs.domain.BBS;
+import com.cjhm.bbs.domain.User;
+import com.cjhm.bbs.domain.enums.BoardType;
+import com.cjhm.bbs.repository.BBSRepository;
+import com.cjhm.bbs.repository.UserRepository;
+import com.cjhm.board.domain.Article;
+import com.cjhm.board.domain.Board;
+import com.cjhm.board.domain.Category;
+import com.cjhm.board.repository.ArticleRepository;
+import com.cjhm.board.repository.BoardRepository;
+import com.cjhm.board.repository.CategoryRepository;
 
 @SpringBootApplication
 public class SpringBbsApplication {

@@ -53,6 +53,17 @@
     				}	
     			}
     		});
+    		$("#articleForm").validate({
+//     			debug : true,
+    			rules:{
+    				title:{
+    					required: true
+    				},				
+    				boardId:{
+    					chkBoardType: true
+    				}	
+    			}
+    		});
     		
     		// 공통 메시지로 생성
     		$.extend($.validator.messages, {
@@ -87,14 +98,23 @@
     	    	form.submit();
     	    });
     	    $("#rearticle").on("click",function(){
-    	    	$("#_method").val("get");
     	    	form.attr("action","/board/rearticle");
     	    	form.submit();
     	    });
     	    
-    	    
+    	    $("#_submitCmt").on("click",function(){
+    	    	var f = $("#_cmtForm");
+    	    	f.submit();
+
+    	    });
    	 })
     	
+    	    function _rmvCmt(cmtId){
+    	    	var f = $("#_cmtForm");
+    	    	$("#_method2").val("delete");
+				$("#cmtId").val(cmtId);
+    	    	f.submit();
+    	    }
 
     </script>
 	
@@ -171,24 +191,34 @@
 <!-- 						<div id="content" name="content"></div> -->
            		 	</td>
 	            </tr>
-	            <tr>
-	                <td></td>
-	                <td></td>
-	            </tr>
 	        </table>
-	    <div style="width: 100%; float: clear;" >
-	    asd
-	    </div>
-        <div class="pull-left">
-            <a href="#" th:onclick="goList()" class="btn btn-default">목록으로</a>
-        </div>
-        <div class="pull-right">
-            <button th:if="!${article?.articleId}" type="submit" class="btn btn-primary" id="insert">저장</button>
-            <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="rearticle">답글쓰기</button>
-            <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="update">수정</button>
-            <button th:if="${article?.articleId}" type="submit" class="btn btn-danger" id="delete">삭제</button>
-        </div>
         </form>
+	    <div style="width: 40%; margin: 0 auto;" >
+	    	<div th:each="cmt : ${article?.commentList}" style="clear: both;">
+	    		<div th:utext="${cmt.content}" style="float: left;"></div>	
+	    		<a href="#" th:onclick="'_rmvCmt(\''+${cmt.commentId}+'\')'" style="float: right;">x</a>	
+	    	</div>
+		    <form id="_cmtForm" name="_cmtForm" action="/board/comment" method="post">
+	        	<input type="hidden" id="_method2" name="_method" >
+	        	<input type="hidden" id="cmtId" name="cmtId">
+		    	<input type="hidden" id="cmtArticleId" name="cmtArticleId" th:value="${article?.articleId}" >
+				<div style="float: left;">
+					<textarea id="cmtContent" name="cmtContent" rows="2" cols="50" style="overflow: hidden; line-height: 14px; height: 50px; width: 400px;"></textarea>
+				</div>
+				<div id="_submitCmt" style="float: right; border: 1px solid black; width: 50px; height: 50px; text-align: center; line-height: 50px;">등록</div>
+		    </form>
+	    </div>
+	    <div style="clear: both;">
+	        <div class="pull-left">
+	            <a href="#" th:onclick="goList()" class="btn btn-default">목록으로</a>
+	        </div>
+	        <div class="pull-right">
+	            <button th:if="!${article?.articleId}" type="submit" class="btn btn-primary" id="insert">저장</button>
+	            <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="rearticle">답글쓰기</button>
+	            <button th:if="${article?.articleId}" type="submit" class="btn btn-info" id="update">수정</button>
+	            <button th:if="${article?.articleId}" type="submit" class="btn btn-danger" id="delete">삭제</button>
+	        </div>
+	    </div>
     </div>
     <!--/body-->
 

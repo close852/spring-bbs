@@ -74,10 +74,10 @@
             </div>
         <div style="width:100%;margin:0 auto; " align="right">
 	        <div class="pull-right" style="width:100px;margin:10 0; float: right;">
-	            <a href="/board/article/list?boardId=393" class="btn btn-primary btn-block" >상담게시판 </a>
+	            <a href="/board/article/list?boardId=239" class="btn btn-primary btn-block" >상담게시판 </a>
 	        </div>
 	        <div class="pull-right" style="width:100px;margin:0px 10px 10px 10px; float: right; ">
-	            <a href="/board/article/list?boardId=357" class="btn btn-primary btn-block" >자유게시판</a>
+	            <a href="/board/article/list?boardId=751" class="btn btn-primary btn-block" >자유게시판</a>
 	        </div>
         </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -110,16 +110,20 @@
             <table class="table table-hover" >
                 <thead>
                 <tr>
-                    <th class="col-md-1" style="width: 5%; text-align: center;" onclick="sorting('articleId')">#</th>
-                    <th class="col-md-5" style="width: 30%; text-align: center;" onclick="sorting('title')">제목</th>
-                    <th class="col-md-1" style="width: 15%; text-align: center;" onclick="sorting('createDate')">작성 날짜</th>
-                    <th class="col-md-1" style="width: 15%; text-align: center; " onclick="sorting('updateDate')">수정 날짜</th>
+                    <th class="col-md-1" style="width: 5%; text-align: center;" >#</th>
+                    <th class="col-md-5" style="width: 30%; text-align: center;" >제목</th>
+                    <th class="col-md-1" style="width: 15%; text-align: center;" >작성 날짜</th>
+                    <th class="col-md-1" style="width: 15%; text-align: center; " >수정 날짜</th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr th:each="article : ${articleList}">
                         <td class="text-center" th:text="${article.articleId}"></td>
-                        <td><a href="#" th:onclick="'viewArticle(\''+${article.articleId}+'\')'" th:text="${article.title}"></a></td>
+                        <td>
+                        	<font th:if="${article.indent}>2" th:each="num: ${#numbers.sequence(3,article.indent)}" >　</font>
+                        	<font th:if="${article.indent}>1">ㄴ</font>                        	
+                        	<a href="#" th:onclick="'viewArticle(\''+${article.articleId}+'\')'" th:text="${article.title}"></a>
+                        </td>
                         <td class="text-center" th:text="${#temporals.format(article.createDate,'yyyy-MM-dd HH:mm')}"></td>
                         <td class="text-center" th:text="${#temporals.format(article.updateDate,'yyyy-MM-dd HH:mm')}"></td>
                     </tr>

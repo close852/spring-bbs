@@ -29,6 +29,14 @@ public class ArticleService {
         pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(),pageable.getSortOr(defaultSort));
 		return articleRepository.findAll(pageable);
 	}
+	public Page<Article> findArticleListDefault(Long boardId,Pageable pageable) {
+		Sort defaultSort = new Sort(Direction.DESC,"refarticleId");
+		defaultSort.and(new Sort(Direction.ASC,"indent"));
+		defaultSort.and(new Sort(Direction.ASC,"sortno"));
+		pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(),(defaultSort));
+		return articleRepository.findAllByBoardId(boardId,pageable);
+
+	}
 	public Page<Article> findArticleList(Long boardId,Pageable pageable) {
 		Sort defaultSort = new Sort(Direction.ASC,"articleId");
 		pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(),pageable.getSortOr(defaultSort));
